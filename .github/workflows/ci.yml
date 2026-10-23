@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      # trains the model (the data is downloaded from UCI) and tests the API
+      - run: python -m creditapi.train
+      - run: pytest -q
+
+  docker:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt && python -m creditapi.train
+      - run: docker build -t credit-pd-api .
+      - name: smoke test of the container
+        run: |
+          docker run -d -p 8000:8000 --name api credit-pd-api
+          sleep 8
+          curl -sf http://localhost:8000/health
+          curl -sf -X POST http://localhost:8000/predict -H "Content-Type: application/json" \
+            -d '{"LIMIT_BAL": 50000, "AGE": 30, "PAY_1": 2, "PAY_2": 2, "PAY_3": 0, "BILL_AMT1": 48000, "PAY_AMT1": 0, "PAY_AMT2": 1000}'

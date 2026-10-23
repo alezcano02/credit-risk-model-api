@@ -1,0 +1,10 @@
+-r requirements-api.txt
+mlflow>=2.14
+requests
+xlrd
+openpyxl
+httpx
+pytest
+matplotlib
+seaborn
+jupyter

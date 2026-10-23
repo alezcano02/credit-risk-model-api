@@ -1,0 +1,27 @@
+{
+  "model": "HistGradientBoostingClassifier",
+  "version": "99272324",
+  "trained_at": "2026-10-22T20:32:02+00:00",
+  "features": [
+    "LIMIT_BAL",
+    "AGE",
+    "PAY_1",
+    "PAY_2",
+    "PAY_3",
+    "BILL_AMT1",
+    "PAY_AMT1",
+    "PAY_AMT2",
+    "utilisation",
+    "months_late",
+    "max_delay"
+  ],
+  "metrics_test": {
+    "auc": 0.7761,
+    "gini": 0.5522,
+    "brier": 0.1358,
+    "default_rate_test": 0.2212
+  },
+  "training_rows": 22500,
+  "intended_use": "Probability of default next month for credit card clients",
+  "limitations": "Trained on one portfolio (Taiwan, 2005); must be recalibrated before use on another population"
+}
